@@ -461,26 +461,6 @@ const FLIGHT={"header":["flight","time","wind_speed","wind_angle","battery_volta
   });
   legendRow('chartOrientation',[{label:'qx',color:COLORS.amber},{label:'qy',color:COLORS.cyan},{label:'qz',color:COLORS.violet},{label:'qw',color:COLORS.rose}]);
 
-
-  // Anomaly detection
-  const anomalies=[];
-  const az=C.linear_acceleration_z.filter(v=>v!==null);
-  const azMax=Math.max(...az);
-  if(azMax>20)anomalies.push(`Peak az spike <strong>${fmt(azMax,1)} m/s²</strong> at t≈${fmt(C.time[C.linear_acceleration_z.indexOf(azMax)],1)}s (possible vibration or impact)`);
-  const angX=C.angular_x.filter(v=>v!==null);
-  const angXMax=Math.max(...angX.map(Math.abs));
-  if(angXMax>1.5)anomalies.push(`Angular rate ωx reached <strong>${fmt(angXMax,2)} rad/s</strong> — large attitude disturbance during ascent`);
-  const battVals=C.battery_voltage.filter(v=>v!==null);
-  const battDrop=battVals[0]-Math.min(...battVals);
-  if(battDrop>0.3)anomalies.push(`Battery sag of <strong>${fmt(battDrop,3)} V</strong> during mid-flight high-current draw`);
-  const anomEl=document.getElementById('anomalyBar');
-  if(anomalies.length){
-    anomEl.innerHTML='<strong>⚠ Flagged events:</strong> '+anomalies.join(' · ');
-  } else {
-    anomEl.style.display='none';
-  }
-
-})();
 </script>
 </body>
 </html>
